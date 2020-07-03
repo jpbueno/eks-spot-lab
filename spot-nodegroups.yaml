@@ -1,0 +1,46 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+    name: eks-spot-demo
+    region: us-east-1
+nodeGroups:
+    - name: ng-4vcpu-16gb-spot
+      minSize: 0
+      maxSize: 5
+      desiredCapacity: 1
+      instancesDistribution:
+        instanceTypes: ["m5.xlarge", "m5n.xlarge", "m5d.xlarge", "m5dn.xlarge","m5a.xlarge", "m4.xlarge"] 
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 0
+        spotAllocationStrategy: capacity-optimized
+      labels:
+        lifecycle: Ec2Spot
+        intent: apps
+        aws.amazon.com/spot: "true"
+      tags:
+        k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+        k8s.io/cluster-autoscaler/node-template/label/intent: apps
+      iam:
+        withAddonPolicies:
+          autoScaler: true
+          albIngress: true
+    - name: ng-8vcpu-32gb-spot
+      minSize: 0
+      maxSize: 5
+      desiredCapacity: 1
+      instancesDistribution:
+        instanceTypes: ["m5.2xlarge", "m5n.2xlarge", "m5d.2xlarge", "m5dn.2xlarge","m5a.2xlarge", "m4.2xlarge"] 
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 0
+        spotAllocationStrategy: capacity-optimized
+      labels:
+        lifecycle: Ec2Spot
+        intent: apps
+        aws.amazon.com/spot: "true"
+      tags:
+        k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+        k8s.io/cluster-autoscaler/node-template/label/intent: apps
+      iam:
+        withAddonPolicies:
+          autoScaler: true
+          albIngress: true
