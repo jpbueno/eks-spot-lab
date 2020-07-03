@@ -3,18 +3,15 @@
 **EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps.**
 
 
-> eksctl create cluster --version=1.16 \
-> --name=eks-spot-demo \
-> --node-private-networking --managed --nodes=3 \
-> --alb-ingress-access \
-> --region=us-east-1 --node-type t3.medium \
-> --node-labels="lifecycle=OnDemand" --asg-access
+> eksctl create cluster --version=1.16 --name=eks-spot-demo --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
 
 **Install kube-ops-view**
 
 
 > git clone https://github.com/hjacobs/kube-ops-view.git
+
 > cd ~/environment/eks-spot-demo/kube-ops-view/deploy
+
 > kubectl apply -k ./
 
 **Open kube-ops-view**
