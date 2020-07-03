@@ -19,7 +19,7 @@
 
 > kubectl port-forward service/kube-ops-view 8080:80
 
-**To increase size, append #scale=2.0 in the end of URL**
+*To increase size, append #scale=2.0 in the end of URL*
 
 **Create spot worker nodes**
 
