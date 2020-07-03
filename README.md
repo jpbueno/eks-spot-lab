@@ -96,7 +96,7 @@
 
 **This deploys three replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot. The “web-stateful” nodes are not fault-tolerant and not appropriate to be deployed on Spot Instances. So, you use nodeSelector again, and instead choose lifecycle: OnDemand. By guiding fault-tolerant pods to Spot Instance nodes, and stateful pods to On-Demand nodes, you can even use this to support multi-tenant clusters.**
 
-> kubectl apply -f lightbulb-jp-app.yaml -n lightbulb-jp-ns
+> kubectl apply -f lightbulb-jp-deploy.yaml -n lightbulb-jp-ns
 
 **Create service**
 
