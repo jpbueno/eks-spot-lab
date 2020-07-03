@@ -1,5 +1,8 @@
 ## [LAB] JP's Amazon EKS with Spot instances.
 
+**Create and connect to your Cloud9 environment. Steps: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html**
+
+
 **EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps.**
 
 
