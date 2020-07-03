@@ -1,4 +1,4 @@
-## Amazon EKS demo with Spot instances.
+## [LAB] Amazon EKS with Spot instances.
 
 **EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps.**
 
