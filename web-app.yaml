@@ -14,7 +14,7 @@ spec:
         app: nginx
     spec:
       containers:
-      - image: nginx
+      - image: jpsant/nginx-with-html
         name: web-stateless
         resources:
           limits:
