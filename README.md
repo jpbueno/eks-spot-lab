@@ -1,6 +1,6 @@
 Amazon EKS demo with Spot instances.
 
-* EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps.* 
+** EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps.**
 
 eksctl create cluster --version=1.16 \
 --name=eks-spot-demo \
