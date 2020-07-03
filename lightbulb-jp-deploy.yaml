@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lightbulb-jp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lightbulb-jp
+  template:
+    metadata:
+      labels:
+        app: lightbulb-jp
+    spec:
+      containers:
+      - image: jpsant/lightbulb-jp:v1
+        imagePullPolicy: Always
+        name: lightbulb-jp
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1024Mi
+          requests:
+            cpu: 1000m
+            memory: 1024Mi
+      nodeSelector:    
+        lifecycle: Ec2Spot
