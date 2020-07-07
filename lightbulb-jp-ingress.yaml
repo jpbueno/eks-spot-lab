@@ -14,5 +14,5 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: "service-2048"
+              serviceName: "lightbulb-jp-service"
               servicePort: 80
