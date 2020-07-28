@@ -26,7 +26,7 @@ eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networki
 kubectl port-forward service/kube-ops-view 8080:80
 ```
 
-_To increase size, append #scale=2.0 in the end of URL_
+_Note: To increase size, append #scale=2.0 in the end of URL_
 
 ### Spot Worker Nodes
 
