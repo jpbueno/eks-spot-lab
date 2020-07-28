@@ -160,4 +160,4 @@ kubectl apply -f lightbulb-jp-ingress.yaml -n lightbulb-jp-ns
 
 ```bash
 kubectl scale --replicas=30 lightbulb-jp -n lightbulb-jp-ns
-``
+```
