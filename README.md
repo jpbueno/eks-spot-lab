@@ -1,29 +1,26 @@
 # [LAB] JP's Amazon EKS with Spot instances
 
-## Create and connect to your Cloud9 environment
+#### Create and connect to your Cloud9 environment
 
 Instructions: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html
 
-## EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and labels lifecycle=OnDemand and intent=control-apps
+### Create an EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and a label called lifecycle=OnDemand
 
 ```bash
 eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
 ```
+### kube-ops-view
 
-
-## Install kube-ops-view
+***Install kube-ops-view***
 
 ```bash
 git clone https://github.com/hjacobs/kube-ops-view.git
 cd ~/environment/eks-spot-lab/kube-ops-view/deploy
 kubectl apply -k ./
-=======
-```bash
 eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
->>>>>>> master
 ```
 
-## Open kube-ops-view
+***Open kube-ops-view***
 
 ```bash
 kubectl port-forward service/kube-ops-view 8080:80
@@ -31,197 +28,136 @@ kubectl port-forward service/kube-ops-view 8080:80
 
 _To increase size, append #scale=2.0 in the end of URL_
 
-## Create spot worker nodes
+### Spot Worker Nodes
+
+***Create spot worker nodes***
 
 ```bash
 eksctl create nodegroup -f spot_nodegroups.yaml
-=======
 git clone https://github.com/hjacobs/kube-ops-view.git
 cd ~/environment/eks-spot-lab/kube-ops-view/deploy
 kubectl apply -k ./
->>>>>>> master
 ```
 
-## Confirm these nodes were added to the cluster
+***Confirm these nodes were added to the cluster***
 
 ```bash
 kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
 ```
 
-## Install Node Termination Handler
-=======
-kubectl port-forward service/kube-ops-view 8080:80
-```
->>>>>>> master
+### Node Termination Handler
+
+***Install Node Termination Handler***
 
 ```bash
+kubectl port-forward service/kube-ops-view 8080:80
 kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.3.1/all-resources.yaml
 ```
 
-## Verify Node Termination Handler is running
+***Verify Node Termination Handler is running***
 
 ```bash
 kubectl get daemonsets --all-namespaces
 ```
 
-## Deploy the Cluster Autoscaler
-=======
-eksctl create nodegroup -f spot_nodegroups.yaml
-```
->>>>>>> master
+### Cluster Autoscaler
+
+***Deploy Cluster Autoscaler***
 
 ```bash
+eksctl create nodegroup -f spot_nodegroups.yaml
 kubectl apply -f cluster-autoscaler-autodiscover.yaml
 ```
 
-## Add cluster-autoscaler.kubernetes.io/safe-to-evictannotation to the deployment
+***Add cluster-autoscaler.kubernetes.io/safe-to-evictannotation to the deployment***
 
 ```bash
 kubectl -n kube-system annotate deployment.apps/cluster-autoscaler cluster-autoscaler.kubernetes.io/safe-to-evict="false"
-=======
-```bash
 kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
->>>>>>> master
 ```
 
-## View cluster-autoscaler logs
+***View cluster-autoscaler logs***
 
 ```bash
 kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 ```
 
-## Create Ingress with AWS ALB Ingress Controller
+### AWS ALB Ingress Controller
+
+***Create Ingress with AWS ALB Ingress Controller***
 
 ```bash
 kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.3.1/all-resources.yaml
 ```
 
-### Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller
+***Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller***
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/rbac-role.yaml
 ```
 
-### Create an IAM policy named ALBIngressControllerIAMPolicy to allow the ALB Ingress controller to make AWS API calls on your behalf.
+***Create an IAM policy named ALBIngressControllerIAMPolicy to allow the ALB Ingress controller to make AWS API calls on your behalf.***
 
 ```bash
 kubectl get daemonsets --all-namespaces
-```
-
-```bash
 aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/iam-policy.json
 ```
 
-### Create a Kubernetes service account and an IAM role (for the pod running the AWS ALB Ingress controller) by substituting \$PolicyARN with the recorded value from the previous step
+***Create a Kubernetes service account and an IAM role (for the pod running the AWS ALB Ingress controller) by substituting \$PolicyARN with the recorded value from the previous step.***
 
 ```bash
 eksctl create iamserviceaccount --cluster=eks-spot-demo --namespace=kube-system --name=alb-ingress-controller --attach-policy-arn=\$PolicyARN --override-existing-serviceaccounts --approve
-=======
-```bash
 kubectl apply -f cluster-autoscaler-autodiscover.yaml
->>>>>>> master
 ```
 
-### Deploy the AWS ALB Ingress controller
+***Deploy the AWS ALB Ingress controller***
 
 ```bash
 kubectl -n kube-system annotate deployment.apps/cluster-autoscaler cluster-autoscaler.kubernetes.io/safe-to-evict="false"
 ```
 
-**View cluster-autoscaler logs**
+***View cluster-autoscaler logs***
 
 ```bash
 kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 ```
 
-**Create Ingress with AWS ALB Ingress Controller**
-
-**Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller**
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/rbac-role.yaml
-```
-
-**Create an IAM policy named ALBIngressControllerIAMPolicy to allow the ALB Ingress controller to make AWS API calls on your behalf.**
-
-```bash
-aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/iam-policy.json
-```
-
-**Create a Kubernetes service account and an IAM role (for the pod running the AWS ALB Ingress controller) by substituting $PolicyARN with the recorded value from the previous step**
-
-```bash
-eksctl create iamserviceaccount --cluster=eks-spot-demo --namespace=kube-system --name=alb-ingress-controller --attach-policy-arn=$PolicyARN --override-existing-serviceaccounts --approve
-```
-
-**Deploy the AWS ALB Ingress controller**
-
-```bash
->>>>>>> master
-curl -sS "https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml" \
-     | sed "s/# - --cluster-name=devCluster/- --cluster-name=eks-spot-demo/g" \
-     | kubectl apply -f -
-```
-
-### Verify that the deployment was successful and the controller started
-=======
-**Verify that the deployment was successful and the controller started**
+***Verify that the deployment was successful and the controller started***
 
 ```bash
 kubectl logs -n kube-system $(kubectl get po -n kube-system | egrep -o alb-ingress[a-zA-Z0-9-]+)
 ```
 
-**Deploy sample app**
->>>>>>> master
+### Sample App
 
-```bash
-kubectl logs -n kube-system \$(kubectl get po -n kube-system | egrep -o alb-ingress[a-zA-Z0-9-]+)
-```
-
-## Deploy sample app
-=======
-```bash
-kubectl create ns lightbulb-jp-ns
-```
->>>>>>> master
-
-### Create namespace
+***Create namespace***
 
 ```bash
 kubectl create ns lightbulb-jp-ns
-```
-```bash
 kubectl apply -f lightbulb-jp-deploy.yaml -n lightbulb-jp-ns
 ```
 
-### This deploys three replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot. The “web-stateful” nodes are not fault-tolerant and not appropriate to be deployed on Spot Instances. So, you use nodeSelector again, and instead choose lifecycle: OnDemand. By guiding fault-tolerant pods to Spot Instance nodes, and stateful pods to On-Demand nodes, you can even use this to support multi-tenant clusters
+***Create deployment with three replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
 
 ```bash
 kubectl apply -f lightbulb-jp-deploy.yaml -n lightbulb-jp-ns
-```
-```bash
 kubectl apply -f lightbulb-jp-service.yaml -n lightbulb-jp-ns
 ```
 
-### Create service
+***Create service***
 
 ```bash
 kubectl apply -f lightbulb-jp-service.yaml -n lightbulb-jp-ns
 ```
 
-### Deploy an Ingress resource for the lightbulb-jp app
+***Deploy an Ingress resource for the lightbulb-jp app***
 
 ```bash
-kubectl apply -f web-app.yaml
-kubectl apply -f lightbulb-jp-ingress.yaml
-```
-
-```bash
-kubectl apply -f lightbulb-jp-ingress.yaml
+kubectl apply -f lightbulb-jp-ingress.yaml -n lightbulb-jp-ns
 ```
 
 ### Scale deployment out
 
 ```bash
-kubectl scale --replicas=30 deployment/web-stateless
-```
+kubectl scale --replicas=30 lightbulb-jp -n lightbulb-jp-ns
+``
