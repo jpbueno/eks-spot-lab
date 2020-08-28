@@ -7,7 +7,7 @@ Instructions: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.
 ### Create an EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and a label called lifecycle=OnDemand
 
 ```bash
-eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
+eksctl create cluster --version=1.17 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
 ```
 ### kube-ops-view
 
@@ -16,8 +16,8 @@ eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networki
 ```bash
 git clone https://github.com/hjacobs/kube-ops-view.git
 cd ~/environment/eks-spot-lab/kube-ops-view/deploy
-kubectl apply -k ./
-eksctl create cluster --version=1.16 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
+kubectl create ns kube-ops-view
+kubectl apply -k ./ -n kube-ops-view
 ```
 
 ***Open kube-ops-view***
