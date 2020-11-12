@@ -4,10 +4,17 @@
 
 Instructions: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html
 
+### Install eksctl
+```bash
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+```
+
 ### Create an EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and a label called lifecycle=OnDemand
 
 ```bash
-eksctl create cluster --version=1.17 --name=eks-spot-lab --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
+eksctl create cluster --version=1.18 --name=eks-spot-lab2 --node-private-networking --managed --nodes=3 --alb-ingress-access --region=us-east-1 --node-type t3.medium --node-labels="lifecycle=OnDemand" --asg-access
 ```
 ### kube-ops-view
 
