@@ -22,15 +22,16 @@ eksctl create cluster --version=1.18 --name=eks-spot-lab --node-private-networki
 
 ```bash
 git clone https://github.com/hjacobs/kube-ops-view.git
-cd kube-ops-view/deploy
+cd kube-ops-view
 kubectl create ns kube-ops-view
+kubectl apply -k deploy -n kube-ops-view
 kubectl apply -k ./ -n kube-ops-view
 ```
 
 ***Open kube-ops-view***
 
 ```bash
-port-forward service/kube-ops-view 8080:80 -n kube-ops-view
+kubectl port-forward service/kube-ops-view 8080:80 -n kube-ops-view
 ```
 
 _Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. To increase size, append #scale=2.0 in the end of URL_
