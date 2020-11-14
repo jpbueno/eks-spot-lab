@@ -22,7 +22,7 @@ eksctl create cluster --version=1.18 --name=eks-spot-lab --node-private-networki
 
 ```bash
 git clone https://github.com/hjacobs/kube-ops-view.git
-cd ~/environment/eks-spot-lab/kube-ops-view/deploy
+cd kube-ops-view/deploy
 kubectl create ns kube-ops-view
 kubectl apply -k ./ -n kube-ops-view
 ```
@@ -57,7 +57,6 @@ kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
 ***Install Node Termination Handler***
 
 ```bash
-kubectl port-forward service/kube-ops-view 8080:80
 kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.10.0/all-resources.yaml
 ```
 
@@ -94,13 +93,13 @@ kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 ***Create Ingress with AWS ALB Ingress Controller***
 
 ```bash
-kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.3.1/all-resources.yaml
+kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.10.0/all-resources.yaml
 ```
 
 ***Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller***
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/rbac-role.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v2.0.1/docs/examples/rbac-role.yaml
 ```
 
 ***Create an IAM policy named ALBIngressControllerIAMPolicy to allow the ALB Ingress controller to make AWS API calls on your behalf.***
