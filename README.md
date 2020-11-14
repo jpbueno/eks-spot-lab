@@ -30,7 +30,7 @@ kubectl apply -k ./ -n kube-ops-view
 ***Open kube-ops-view***
 
 ```bash
-kubectl port-forward service/kube-ops-view 8080:80
+port-forward service/kube-ops-view 8080:80 -n kube-ops-view
 ```
 
 _Note: To increase size, append #scale=2.0 in the end of URL_
