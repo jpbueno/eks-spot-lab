@@ -58,7 +58,7 @@ kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
 
 ```bash
 kubectl port-forward service/kube-ops-view 8080:80
-kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.3.1/all-resources.yaml
+kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.10.0/all-resources.yaml
 ```
 
 ***Verify Node Termination Handler is running***
