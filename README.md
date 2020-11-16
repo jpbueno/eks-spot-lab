@@ -85,10 +85,10 @@ kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 
 ### AWS ALB Ingress Controller
 
-***Create Ingress with AWS ALB Ingress Controller***
+***Create AWS load balancer controller***
 
 ```bash
-kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/download/v1.10.0/all-resources.yaml
+eksctl utils associate-iam-oidc-provide --cluster eks-spot-lab --approve
 ```
 
 ***Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller***
