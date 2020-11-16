@@ -67,7 +67,7 @@ kubectl get daemonsets --all-namespaces
 ***Deploy Cluster Autoscaler***
 
 ```bash
-kubectl apply -f cluster-autoscaler-autodiscover.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
 ```
 
 ***Add cluster-autoscaler.kubernetes.io/safe-to-evictannotation to the deployment***
