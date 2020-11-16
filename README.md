@@ -67,7 +67,6 @@ kubectl get daemonsets --all-namespaces
 ***Deploy Cluster Autoscaler***
 
 ```bash
-eksctl create nodegroup -f spot_nodegroups.yaml
 kubectl apply -f cluster-autoscaler-autodiscover.yaml
 ```
 
