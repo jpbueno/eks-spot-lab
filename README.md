@@ -32,7 +32,7 @@ kubectl apply -k deploy
 kubectl port-forward service/kube-ops-view 8080:80
 ```
 
-_Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. To increase size, append #scale=2.0 in the end of URL_
+_Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. To increase size, append /#scale=2.0 in the end of URL_
 
 ### Spot Worker Nodes
 
