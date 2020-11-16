@@ -40,9 +40,6 @@ _Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. T
 
 ```bash
 eksctl create nodegroup -f spot-nodegroups.yaml
-git clone https://github.com/hjacobs/kube-ops-view.git
-cd ~/environment/eks-spot-lab/kube-ops-view/deploy
-kubectl apply -k ./
 ```
 
 ***Confirm these nodes were added to the cluster***
