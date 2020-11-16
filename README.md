@@ -25,7 +25,6 @@ git clone https://github.com/hjacobs/kube-ops-view.git
 cd kube-ops-view
 kubectl create ns kube-ops-view
 kubectl apply -k deploy -n kube-ops-view
-kubectl apply -k ./ -n kube-ops-view
 ```
 
 ***Open kube-ops-view***
