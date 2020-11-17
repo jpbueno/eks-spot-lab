@@ -13,7 +13,6 @@ git clone https://github.com/jpbueno/eks-spot-lab.git
 ```bash
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
-eksctl version
 ```
 
 ### Create an EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and a label called lifecycle=OnDemand
