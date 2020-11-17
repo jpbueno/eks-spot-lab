@@ -42,6 +42,7 @@ _Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. T
 ***Create spot worker nodes***
 
 ```bash
+cd ..
 eksctl create nodegroup -f spot-nodegroups.yaml
 ```
 
