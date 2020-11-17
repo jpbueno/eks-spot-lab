@@ -25,7 +25,6 @@ eksctl create cluster --version=1.18 --name=eks-spot-lab --node-private-networki
 ***Install kube-ops-view***
 
 ```bash
-git clone https://github.com/hjacobs/kube-ops-view.git
 cd kube-ops-view
 kubectl apply -k deploy
 ```
