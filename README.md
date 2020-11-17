@@ -83,60 +83,50 @@ kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
 kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 ```
 
-### AWS ALB Ingress Controller
+### AWS Load Balancer Controller
 
-***Create AWS load balancer controller***
+***Create an IAM OIDC provider and associate it with the cluster***
 
 ```bash
-eksctl utils associate-iam-oidc-provide --cluster eks-spot-lab --approve
-
+eksctl utils associate-iam-oidc-provider --cluster eks-spot-lab --approve
 ```
 
-***Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller***
+***Download and create an IAM policy for the AWS load balancer controller***
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v2.0.1/docs/examples/rbac-role.yaml
+curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam-policy.json
 ```
 
-***Create an IAM policy named ALBIngressControllerIAMPolicy to allow the ALB Ingress controller to make AWS API calls on your behalf.***
+***Create an IAM role and Kubernetes service account named aws-load-balancer-controller in the kube-system namespace, a cluster role, and a cluster role binding for the load balancer controller***
 
 ```bash
-kubectl get daemonsets --all-namespaces
-aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/iam-policy.json
+eksctl create iamserviceaccount \                                 
+  --cluster=eks-spot-lab \ 
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --attach-policy-arn=arn:aws:iam::arn:aws:iam::220713292402:policy/AWSLoadBalancerControllerIAMPolicy \
+  --override-existing-serviceaccounts \
+  --approve
 ```
 
-***Create a Kubernetes service account and an IAM role (for the pod running the AWS ALB Ingress controller) by substituting \$PolicyARN with the recorded value from the previous step.***
+***Install the controller and verify if it is installed***
 
 ```bash
-eksctl create iamserviceaccount --cluster=eks-spot-demo --namespace=kube-system --name=alb-ingress-controller --attach-policy-arn=\$PolicyARN --override-existing-serviceaccounts --approve
-kubectl apply -f cluster-autoscaler-autodiscover.yaml
-```
-
-***Deploy the AWS ALB Ingress controller***
-
-```bash
-kubectl -n kube-system annotate deployment.apps/cluster-autoscaler cluster-autoscaler.kubernetes.io/safe-to-evict="false"
-```
-
-***View cluster-autoscaler logs***
-
-```bash
-kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
-```
-
-***Verify that the deployment was successful and the controller started***
-
-```bash
-kubectl logs -n kube-system $(kubectl get po -n kube-system | egrep -o alb-ingress[a-zA-Z0-9-]+)
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml
+curl -o v2_0_0_full.yaml https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/v2_0_0_full.yaml
+kubectl apply -f v2_0_0_full.yaml
+kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
 
 ### Sample App
 
-***Create namespace***
+***Deploy the game 2048 as a sample application. The deployment is created with five replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
 
 ```bash
-kubectl create ns lightbulb-jp-ns
-kubectl apply -f lightbulb-jp-deploy.yaml -n lightbulb-jp-ns
+kubectl apply -f 2048_full.yaml
 ```
 
 ***Create deployment with three replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
