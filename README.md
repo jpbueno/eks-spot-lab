@@ -89,6 +89,7 @@ kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 
 ```bash
 eksctl utils associate-iam-oidc-provide --cluster eks-spot-lab --approve
+
 ```
 
 ***Deploy the relevant RBAC roles and role bindings as required by the AWS ALB Ingress controller***
