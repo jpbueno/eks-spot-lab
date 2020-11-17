@@ -46,7 +46,7 @@ cd ..
 eksctl create nodegroup -f spot-nodegroups.yaml
 ```
 
-***Confirm these nodes were added to the cluster***
+***After a few minutes, confirm these nodes were added to the cluster by looking at kube-ops-view or by running the following command***
 
 ```bash
 kubectl get nodes --show-labels --selector=lifecycle=Ec2Spot
@@ -95,10 +95,9 @@ kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
 eksctl utils associate-iam-oidc-provider --cluster eks-spot-lab --approve
 ```
 
-***Download and create an IAM policy for the AWS load balancer controller***
+***Create an IAM policy for the AWS load balancer controller***
 
 ```bash
-curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
 aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam-policy.json
