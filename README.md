@@ -103,6 +103,8 @@ aws iam create-policy \
     --policy-document file://iam-policy.json
 ```
 
+_Note:Take note of the policy ARN that is returned._
+
 ***Create an IAM role and Kubernetes service account named aws-load-balancer-controller in the kube-system namespace, a cluster role, and a cluster role binding for the load balancer controller***
 
 ```bash
