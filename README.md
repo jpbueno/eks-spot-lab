@@ -106,8 +106,8 @@ aws iam create-policy \
 ***Create an IAM role and Kubernetes service account named aws-load-balancer-controller in the kube-system namespace, a cluster role, and a cluster role binding for the load balancer controller***
 
 ```bash
-eksctl create iamserviceaccount \                                 
-  --cluster=eks-spot-lab \ 
+eksctl create iamserviceaccount \
+  --cluster=eks-spot-lab \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
   --attach-policy-arn=arn:aws:iam::arn:aws:iam::220713292402:policy/AWSLoadBalancerControllerIAMPolicy \
