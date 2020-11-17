@@ -129,24 +129,13 @@ kubectl get deployment -n kube-system aws-load-balancer-controller
 kubectl apply -f 2048_full.yaml
 ```
 
-***Create deployment with three replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
+***After a few minutes, verify that the Ingress resource was created with the following command.***
 
 ```bash
-kubectl apply -f lightbulb-jp-deploy.yaml -n lightbulb-jp-ns
-kubectl apply -f lightbulb-jp-service.yaml -n lightbulb-jp-ns
+kubectl get ingress/ingress-2048 -n game-2048
 ```
 
-***Create service***
-
-```bash
-kubectl apply -f lightbulb-jp-service.yaml -n lightbulb-jp-ns
-```
-
-***Deploy an Ingress resource for the lightbulb-jp app***
-
-```bash
-kubectl apply -f lightbulb-jp-ingress.yaml -n lightbulb-jp-ns
-```
+***Open a browser and navigate to the ADDRESS URL from the previous command output to see the sample application.***
 
 ### Scale deployment out
 
