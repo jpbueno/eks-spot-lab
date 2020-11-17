@@ -1,6 +1,6 @@
 # [LAB] JP's Amazon EKS with Spot instances
 
-### Create, connect to your Cloud9 environment, and open a terminal.
+### You can run this lab either from your local computer or for AWS Cloud9. If you opt for AWS Cloud9, please follow the link bellow to create, connect to your Cloud9 environment, and open a terminal to get started.
 
 Instructions: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html
 
