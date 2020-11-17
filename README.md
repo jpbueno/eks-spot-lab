@@ -4,6 +4,11 @@
 
 Instructions: https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html
 
+### Clone this repo
+```bash
+git clone https://github.com/jpbueno/eks-spot-lab.git
+```
+
 ### Install eksctl
 ```bash
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
