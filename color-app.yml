@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: color-ns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red
+  namespace: color-ns
+spec:
+  selector:
+    matchLabels:
+      app: red
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: red
+    spec:
+      containers:
+      - name: red
+        image: 970805265562.dkr.ecr.us-west-2.amazonaws.com/colorteller:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 200m
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+          - name: COLOR
+            value: '<html style="background-color: red;"></html>'
+          - name: SERVER_PORT
+            value: "8080"
+      nodeSelector:    
+        lifecycle: Ec2Spot
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: color-ns
+  name: red
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: red
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: color-ns
+  name: red
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: collor-app
+    alb.ingress.kubernetes.io/group.order: '1'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /red
+            backend:
+              serviceName: red
+              servicePort: 80
+          - path: /color
+            backend:
+              serviceName: red
+              servicePort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+  namespace: color-ns
+spec:
+  selector:
+    matchLabels:
+      app: blue
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: blue
+    spec:
+      containers:
+      - name: blue
+        image: 970805265562.dkr.ecr.us-west-2.amazonaws.com/colorteller:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+          - name: COLOR
+            value: '<html style="background-color: blue;"></html>'
+          - name: SERVER_PORT
+            value: "8080"
+      nodeSelector:    
+        lifecycle: Ec2Spot
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: color-ns
+  name: blue
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: blue
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: color-ns
+  name: blue
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: collor-app
+    alb.ingress.kubernetes.io/group.order: '2'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /blue
+            backend:
+              serviceName: blue
+              servicePort: 80
+          - path: /color
+            backend:
+                serviceName: blue
+                servicePort: 80
