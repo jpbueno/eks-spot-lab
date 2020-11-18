@@ -33,7 +33,7 @@ kubectl apply -k deploy -n kube-ops-view-ns
 ***Open kube-ops-view***
 
 ```bash
-kubectl port-forward service/kube-ops-view 8080:80
+kubectl port-forward service/kube-ops-view 8080:80 -n kube-ops-view-ns
 ```
 
 _Note: Open kube-ops-view by accessinig http://localhost:8080/ in the browser. To increase size, append /#scale=2.0 in the end of URL._
@@ -128,16 +128,16 @@ kubectl get deployment -n kube-system aws-load-balancer-controller
 
 ### Sample App
 
-***Deploy the game 2048 as a sample application. The deployment is created with five replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
+***Deploy the Color app as a sample application. The deployment is created with five replicas, which land on one of the Spot Instance node groups due to the nodeSelector choosing lifecycle: Ec2Spot.***
 
 ```bash
-kubectl apply -f 2048_full.yaml
+kubectl apply -f color-app.yaml
 ```
 
 ***After a few minutes, verify that the Ingress resource was created with the following command.***
 
 ```bash
-kubectl get ingress/ingress-2048 -n game-2048
+kubectl get -n color-ns ingress
 ```
 
 ***Open a browser and navigate to the ADDRESS URL from the previous command output to see the sample application.***
@@ -145,5 +145,24 @@ kubectl get ingress/ingress-2048 -n game-2048
 ### Scale deployment out
 
 ```bash
-kubectl scale --replicas=30 deployment/deployment-2048 -n game-jp
+kubectl scale --replicas=100 -n color-ns deployment blue
+kubectl scale --replicas=100 -n color-ns deployment red
 ```
+
+### Fargate (Optional)
+
+***Create Fargate***
+
+```bash
+eksctl create fargateprofile --cluster eks-spot-lab --region us-east-1 --name alb-sample-app --namespace game-2048
+```
+***After a few minutes, verify that the Ingress resource was created with the following command.***
+
+```bash
+kubectl get ingress/ingress-2048 -n game-2048
+```
+
+### Scale deployment out
+
+```bash
+kubectl scale --replicas=100 -n game-2048 deployment deployment-2048 
