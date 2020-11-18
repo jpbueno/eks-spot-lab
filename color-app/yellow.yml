@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yellow
+  namespace: color-ns
+spec:
+  selector:
+    matchLabels:
+      app: yellow
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: yellow
+    spec:
+      containers:
+      - name: yellow
+        image: subfuzion/colorteller:latest
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+          - name: COLOR
+            value: '<html style="background-color: yellow;"></html>'
+          - name: SERVER_PORT
+            value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: color-ns
+  name: yellow
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: yellow
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: color-ns
+  name: yellow
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: yellow
+              servicePort: 80
