@@ -144,5 +144,5 @@ kubectl get ingress/ingress-2048 -n game-2048
 ### Scale deployment out
 
 ```bash
-kubectl scale --replicas=30 lightbulb-jp -n lightbulb-jp-ns
+kubectl scale --replicas=30 deployment/deployment-2048 -n game-jp
 ```
