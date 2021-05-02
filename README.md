@@ -25,7 +25,7 @@ eksctl create cluster --name=eks-spot-lab --node-private-networking --managed --
 ***Install kube-ops-view***
 
 ```bash
-cd kube-ops-view
+cd kube-ops-view-jp
 kubectl create ns kube-ops-view-ns
 kubectl apply -k deploy -n kube-ops-view-ns
 ```
