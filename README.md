@@ -18,7 +18,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 ### Create an EKS cluster with a managed node group having 3 On-Demand t3.medium nodes and a label called lifecycle=OnDemand
 
 ```bash
-eksctl create cluster --name=eks-spot-lab --node-private-networking --managed --nodes=3 --region=us-east-1 --node-type t4g.medium --node-labels="lifecycle=OnDemand"
+eksctl create cluster --name=eks-spot-lab --node-private-networking --managed --nodes=3 --region=us-east-1 --node-type t3a.medium --node-labels="lifecycle=OnDemand"
 ```
 ### kube-ops-view
 
